@@ -35,6 +35,8 @@ namespace MootableSpace.Web.Controllers
             var user = await _userMAnager.GetUserAsync(HttpContext.User);
             model.Id = user.Id;
             model.UserName = user.UserName;
+            model.FirstName= user.FirstName;
+            model.LastName= user.LastName;
             return View(model);
         }
         [HttpGet]

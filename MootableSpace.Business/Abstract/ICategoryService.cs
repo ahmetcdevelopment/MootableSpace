@@ -11,6 +11,6 @@ namespace MootableSpace.Business.Abstract
     public interface ICategoryService
     {
         public IQueryable<CategoryDto> FetchAllDto();
-        public IList<SelectListItem> GetAllBySelectListItems();
+        public SelectList GetAllBySelectListItems();
     }
 }

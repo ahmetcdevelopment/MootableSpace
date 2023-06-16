@@ -19,7 +19,9 @@ namespace MootableSpace.Web.ViewComponents
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             return View(new UserViewModel
             {
-                UserName = user.UserName
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
             });
         }
     }

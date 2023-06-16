@@ -71,6 +71,9 @@
     a {
         color: #ddac0f !important;
     }
+
+    
+
 </style>
 <head>
     <meta charset="utf-8" />
@@ -78,9 +81,11 @@
     <title>@ViewData["Title"] - mootable</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/mootable.Web.styles.css" asp-append-version="true" />
+    @*<link rel="stylesheet" href="~/mootable.Web.styles.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+    @await Html.PartialAsync("_LayoutCssPartial")
+    @await RenderSectionAsync("Styles",false)
 </head>
 <body>
     <header>
@@ -131,6 +136,7 @@
                             </div>*@
                         </li>
                     </ul>
+                    
                 </div>
             </div>
         </nav>
@@ -149,22 +155,24 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @await Html.PartialAsync("_LayoutJsPartial")
     @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
 </html>
 
 <script>
     // Get the user button and the dropdown content
-    var userBtn = document.getElementById("user-btn");
-    var dropdownContent = userBtn.nextElementSibling;
+    //var userBtn = document.getElementById("user-btn");
+    //var dropdownContent = userBtn.nextElementSibling;
 
-    // Add a click event listener to the user button
-    userBtn.addEventListener("click", function () {
-        // Toggle the display of the dropdown content
-        if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-        } else {
-            dropdownContent.style.display = "block";
-        }
-    });
+    //// Add a click event listener to the user button
+    //userBtn.addEventListener("click", function () {
+    //    // Toggle the display of the dropdown content
+    //    if (dropdownContent.style.display === "block") {
+    //        dropdownContent.style.display = "none";
+    //    } else {
+    //        dropdownContent.style.display = "block";
+    //    }
+    //});
 </script>

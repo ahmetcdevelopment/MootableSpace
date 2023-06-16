@@ -15,7 +15,7 @@ namespace MootableSpace.DataAccess.Context
     public class mootableSpaceContext:IdentityDbContext
         <User,Role,int,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
     {
-        public mootableSpaceContext(DbContextOptions options) : base(options)
+        public mootableSpaceContext(DbContextOptions<mootableSpaceContext> options) : base(options)
         {
         }
 

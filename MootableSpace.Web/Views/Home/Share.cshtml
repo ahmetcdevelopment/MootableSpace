@@ -1,0 +1,80 @@
+﻿@model MootableSpace.Web.Models.MootEditViewModel
+<style>
+    button {
+        color: #ddac0f;
+        margin-top: 1%;
+        margin-bottom: 1%;
+        margin-right: 7%;
+        transition: 0.5s linear;
+    }
+
+        button:hover {
+            background-color: #ddac0f;
+            color: #333;
+            width: 15%;
+        }
+
+        button span {
+            color: #ddac0f;
+        }
+
+        button:hover span {
+            color: #333;
+        }
+
+    .textarea-share {
+        margin: 3%;
+        margin-bottom: 1%;
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid #ddac0f;
+        width: 95%;
+        height: 50px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        resize: none;
+    }
+
+        .textarea-share:focus {
+            width: 90%;
+            height: 100px;
+        }
+
+    .success-message {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: green;
+        color: white;
+    }
+</style>
+<form asp-controller="Home" asp-action="Share" id="form-share-moot">
+    <textarea id="mootTextArea" asp-for="Text" class="textarea-share form-control" placeholder="Bir moot paylaş."></textarea>
+    <div style="display:flex;">
+        @Html.DropDownListFor(m=>m.CategoryId, Model.Categories, new { @class="form-control",@placeholder="Kategoriler", @maxlength="10"})
+        <button style="width:30%; margin-right:3%;"><span class="fas fa-folder-open"></span> Fotoğraf </button>
+        <button id="shareButton" style="width:30%; margin-right:3%;"><span class="fas fa-reply"></span> Paylaş </button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#shareButton").click(function (event) {
+            event.preventDefault(); // formun otomatik olarak gönderilmesini engelledim
+            // formu gönderdim
+            var form = $("#form-share-moot");
+            var url = form.attr("action");
+            var data = form.serialize();
+            $.post(url, data, function (response) {
+                var successMessage = $("<div>Moot Paylaşıldı.</div>").addClass("success-message");
+                $("body").append(successMessage);
+                setTimeout(function () {
+                    successMessage.remove();
+                }, 3000);
+                $("#mootTextArea").val("");
+            });
+        });
+    });
+</script>

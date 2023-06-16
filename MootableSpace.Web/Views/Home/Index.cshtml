@@ -1,10 +1,11 @@
-﻿@*@model mootable.Web.Models.MootEditViewModel*@
+﻿@model MootableSpace.Web.Models.MootViewModel
 @{
     ViewData["Title"] = "Anasayfa";
 }
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <style>
@@ -16,7 +17,7 @@
     .widget-container {
         margin-bottom: 15px;
         background-color: #333;
-        width: 75%;
+        width: 250%;
         display: flex;
         justify-content: center;
         border-radius: 20px;
@@ -28,8 +29,7 @@
     }
 
     .widget-content {
-        width: 100%;
-        max-width: 75%;
+        width: 75%;
         padding: 0;
         box-sizing: border-box;
         word-wrap: break-word;
@@ -103,7 +103,6 @@
     .form-control {
         background-color: #333; /* arka plan rengi */
         color: #ddac0f; /* yazı rengi */
-        ;
         font-size: 15px; /* yazı tipi büyüklüğü */
         font-family: Arial, sans-serif; /* yazı tipi */
         border-radius: 20px; /* köşe yuvarlama */
@@ -129,23 +128,23 @@
             border: 1px solid #ddac0f /* kenarlık */;
         }
 </style>
+<div id="modalPlaceHolder" aria-hidden="true"></div>
 <div class="widget-container">
     <div class="widget-content">
-       @* @Html.PartialAsync("MootShare").Result*@
-        <br />
+        @Html.Partial("Share",Model.EditModel)   
     </div>
 </div>
 @{
-    for (int i = 0; i < 4; i++)
+    foreach (var moot in Model.DtoList)
     {
         <div class="widget-container">
             <div class="widget-content">
-                <h3>What is Lorem Ipsum?</h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                <h3>@moot.UserName</h3>
+                <p>@moot.Text</p>
                 <div class="widget-buttons-center">
-                    <button><span class="fas fa-award"></span> Katıl </button>
-                    <button><span class="fas fa-comments"></span> Yorum </button>
-                    <button><span class="fas fa-reply-all"></span> Alıntı </button>
+                    <button><span class="fas fa-award"></span> Katıl : @moot.AgreeCount</button>
+                    <button><span class="fas fa-comments"></span> Yorum : @moot.CommentCount</button>
+                    <button><span class="fas fa-reply-all"></span> Alıntı : @moot.ViewCount</button>
                 </div>
             </div>
         </div>

@@ -1,13 +1,27 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using mootableProject.Shared.Data.Abstract;
+using mootableProject.Shared.Data.Concrete.EntityFramework;
 using mootableProject.Shared.Entities.Concrete;
+using MootableSpace.Business.Abstract;
+using MootableSpace.Business.Concrete;
+using MootableSpace.DataAccess.Abstract;
+using MootableSpace.DataAccess.Concrete;
+using MootableSpace.DataAccess.Concrete.EntityFramework;
 using MootableSpace.DataAccess.Context;
+using MootableSpace.Entities.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<mootableSpaceContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+#region Lifetime Scope
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IMootService, MootManager>();
+builder.Services.AddScoped<ICategoryService,  CategoryManager>();
+#endregion
 builder.Services.AddIdentity<User, Role>(options =>
 {
     options.Password.RequireDigit = false; // þifrede rakam bulunsun mu?

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using mootableProject.Shared.Data.Abstract;
 using MootableSpace.Business.Abstract;
+using MootableSpace.DataAccess.Abstract;
 using MootableSpace.Entities.Concrete;
 using MootableSpace.Entities.Dtos;
 using System;
@@ -13,15 +14,15 @@ namespace MootableSpace.Business.Concrete
 {
     public class CategoryManager : ICategoryService
     {
-        private readonly IEntityRepository<Category> _categoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryManager(IEntityRepository<Category> categoryRepository)
+        public CategoryManager(IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
         public IQueryable<CategoryDto> FetchAllDto()
         {
-            var query = from c in _categoryRepository.GetAll()
+            var query = from c in _unitOfWork.Categories.GetAll()
                         where c.IsDeleted == false
                         select new CategoryDto
                         {
@@ -32,20 +33,15 @@ namespace MootableSpace.Business.Concrete
             return query;
         }
 
-        public IList<SelectListItem> GetAllBySelectListItems()
+        public SelectList GetAllBySelectListItems()
         {
-            List<SelectListItem> selectList = new List<SelectListItem>();
-            foreach (var c in FetchAllDto().ToList())
+            List<SelectListItem> _list = new List<SelectListItem>();
+            var categories = _unitOfWork.Categories.GetAll();
+            foreach (var c in categories)
             {
-                SelectListItem option = new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name,
-                    Selected = false
-                };
-                selectList.Add(option);
+                _list.Add(new SelectListItem { Value = Convert.ToString(c.Id), Text = c.Name, Selected = false });
             }
-            return selectList;
+            return new SelectList(_list, "Value", "Text");
         }
     }
 }

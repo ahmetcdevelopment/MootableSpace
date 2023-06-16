@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using mootableProject.Shared.Data.Abstract;
-using mootableProject.Shared.Data.UnitOfWork;
 using mootableProject.Shared.Entities.Concrete;
 using mootableProject.Shared.Messages;
 using mootableProject.Shared.Results.Abstract;
@@ -8,6 +7,7 @@ using mootableProject.Shared.Results.ComplexTypes;
 using mootableProject.Shared.Results.Concrete;
 using mootableProject.Shared.Utilities.Messages;
 using MootableSpace.Business.Abstract;
+using MootableSpace.DataAccess.Abstract;
 using MootableSpace.Entities.Concrete;
 using MootableSpace.Entities.Dtos;
 using System;
@@ -20,23 +20,20 @@ namespace MootableSpace.Business.Concrete
 {
     public class MootManager : IMootService
     {
-        private readonly IEntityRepository<Moot> _mootRepository;
-        private readonly IEntityRepository<Category> _categoryRepository;
         private readonly UserManager<User> _userService;
         private readonly IUnitOfWork _unitOfWork;
-        public MootManager(IEntityRepository<Moot> mootRepository, IEntityRepository<Category> categoryRepository,
-            UserManager<User> userService, IUnitOfWork unitOfWork)
+        public MootManager(UserManager<User> userService, IUnitOfWork unitOfWork)
         {
-            _mootRepository = mootRepository;
-            _categoryRepository = categoryRepository;
             _userService = userService;
             _unitOfWork = unitOfWork;
         }
 
-        public IQueryable<MootDto> FetchAllDtos()
+        public IList<MootDto> FetchAllDtos()
         {
-            var query = from m in _mootRepository.GetAll().Where(m => !m.IsDeleted)
-                        join c in _categoryRepository.GetAll().Where(c => !c.IsDeleted)
+            var moots = _unitOfWork.Moots.GetAll().ToList();
+            var categories = _unitOfWork.Categories.GetAll().ToList();
+            var query = from m in moots
+                        join c in categories
                         on m.CategoryId equals c.Id
                         join u in _userService.Users.ToList()
                         on m.UserId equals u.Id
@@ -53,7 +50,7 @@ namespace MootableSpace.Business.Concrete
                             ViewCount = m.ViewCount,
                             UserName = u.UserName
                         };
-            return query;
+            return query.ToList();
         }
 
         public async Task<IResult> Save(Moot moot)
@@ -62,12 +59,12 @@ namespace MootableSpace.Business.Concrete
             string msg = "";
             if (entityOldId != 0)
             {
-                await _mootRepository.UpdateAsync(moot);
+                await _unitOfWork.Moots.UpdateAsync(moot);
                 msg = new Messages<Moot>(MessageStatus.Update, true).Text;
             }
             else
             {
-                await _mootRepository.AddAsync(moot);
+                await _unitOfWork.Moots.AddAsync(moot);
                 msg = new Messages<Moot>(MessageStatus.Add, true).Text; 
             }
             await _unitOfWork.CommitAsync();
@@ -76,7 +73,7 @@ namespace MootableSpace.Business.Concrete
 
         public async Task<IDataResult<Moot>> SelectById(int id)
         {
-            var entity= await _mootRepository.GetAsync(m=>m.Id== id);
+            var entity= await _unitOfWork.Moots.GetAsync(m=>m.Id== id);
             return entity != null && entity.Id <= 0 ?
                 new DataResult<Moot>(ResultStatus.Warning, new Messages<Moot>(MessageStatus.Get, false).Text, null) :
                 new DataResult<Moot>(ResultStatus.Success, new Messages<Moot>(MessageStatus.Get, true).Text, entity);
