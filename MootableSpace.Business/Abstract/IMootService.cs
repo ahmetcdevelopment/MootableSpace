@@ -12,6 +12,7 @@ namespace MootableSpace.Business.Abstract
     public interface IMootService
     {
         public IList<MootDto> FetchAllDtos();
+        public IList<MootDto> FetchAllDtosByUserId(int userId);
         public Task<IResult> Save(Moot moot);
         public Task<IDataResult<Moot>> SelectById(int id);
     }

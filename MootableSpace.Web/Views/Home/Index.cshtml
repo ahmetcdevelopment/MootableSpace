@@ -2,12 +2,6 @@
 @{
     ViewData["Title"] = "Anasayfa";
 }
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-
 <style>
     .container {
         display: flex;
@@ -36,6 +30,32 @@
         overflow-wrap: break-word;
         align-items: center;
     }
+
+    .widget-content-header {
+        margin-top: 1%;
+        margin-left: 1%;
+        margin-right: 1%;
+        display: flex;
+        margin-bottom: 3%;
+        justify-content: space-between;
+    }
+
+    .widget-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .widget-content-header h3 {
+            margin-right: auto;
+        }
+
+        .widget-content-header p {
+            display: flex;
+            align-items: center;
+            margin-left: 1%;
+            color: #ddac0f;
+        }
 
     h3 {
         margin-top: 3%;
@@ -127,11 +147,16 @@
             color: #ddac0f;
             border: 1px solid #ddac0f /* kenarlık */;
         }
+
 </style>
-<div id="modalPlaceHolder" aria-hidden="true"></div>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 <div class="widget-container">
     <div class="widget-content">
-        @Html.Partial("Share",Model.EditModel)   
+        @Html.Partial("Share",Model.EditModel)
     </div>
 </div>
 @{
@@ -139,7 +164,10 @@
     {
         <div class="widget-container">
             <div class="widget-content">
-                <h3>@moot.UserName</h3>
+            <div class="widget-content-header">
+                    <h3>@moot.UserName</h3>
+                    <p>@moot.ShareDate.Hour:@moot.ShareDate.Minute - @moot.ShareDate.Day/@moot.ShareDate.Month/@moot.ShareDate.Year</p>
+            </div>
                 <p>@moot.Text</p>
                 <div class="widget-buttons-center">
                     <button><span class="fas fa-award"></span> Katıl : @moot.AgreeCount</button>
@@ -150,5 +178,6 @@
         </div>
     }
 }
+
 <script>
 </script>

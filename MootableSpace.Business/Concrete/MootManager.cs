@@ -37,6 +37,33 @@ namespace MootableSpace.Business.Concrete
                         on m.CategoryId equals c.Id
                         join u in _userService.Users.ToList()
                         on m.UserId equals u.Id
+                        orderby m.ShareDate descending
+                        select new MootDto
+                        {
+                            Id = m.Id,
+                            CategoryName = c.Name,
+                            AgreeCount = m.Id,
+                            CommentCount = m.CommentCount,
+                            ShareDate = m.ShareDate,
+                            Picture = m.Picture,
+                            ShareStatus = m.ShareStatus,
+                            Text = m.Text,
+                            ViewCount = m.ViewCount,
+                            UserName = u.UserName
+                        };
+            return query.ToList();
+        }
+
+        public IList<MootDto> FetchAllDtosByUserId(int userId)
+        {
+            var moots = _unitOfWork.Moots.GetAll().ToList();
+            var categories = _unitOfWork.Categories.GetAll().ToList();
+            var query = from m in moots
+                        join c in categories
+                        on m.CategoryId equals c.Id
+                        join u in _userService.Users.ToList()
+                        on m.UserId equals u.Id
+                        where m.UserId == userId
                         select new MootDto
                         {
                             Id = m.Id,
@@ -65,7 +92,7 @@ namespace MootableSpace.Business.Concrete
             else
             {
                 await _unitOfWork.Moots.AddAsync(moot);
-                msg = new Messages<Moot>(MessageStatus.Add, true).Text; 
+                msg = new Messages<Moot>(MessageStatus.Add, true).Text;
             }
             await _unitOfWork.CommitAsync();
             return new Result(ResultStatus.Success, msg);
@@ -73,7 +100,7 @@ namespace MootableSpace.Business.Concrete
 
         public async Task<IDataResult<Moot>> SelectById(int id)
         {
-            var entity= await _unitOfWork.Moots.GetAsync(m=>m.Id== id);
+            var entity = await _unitOfWork.Moots.GetAsync(m => m.Id == id);
             return entity != null && entity.Id <= 0 ?
                 new DataResult<Moot>(ResultStatus.Warning, new Messages<Moot>(MessageStatus.Get, false).Text, null) :
                 new DataResult<Moot>(ResultStatus.Success, new Messages<Moot>(MessageStatus.Get, true).Text, entity);

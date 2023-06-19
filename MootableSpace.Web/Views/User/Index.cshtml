@@ -2,8 +2,191 @@
 @{
     ViewData["Title"] = "Profil";
 }
-@if(Model !=null){
-    @Model.UserName
-    @Model.FirstName
-    @Model.LastName
+<style>
+    .container {
+        display: flex;
+        align-items: center;
+    }
+
+    .widget-container {
+        margin-bottom: 15px;
+        background-color: #333;
+        width: 250%;
+        display: flex;
+        justify-content: center;
+        border-radius: 20px;
+        box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,.8);
+    }
+
+    .widget-content {
+        width: 85%;
+        padding: 0;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        align-items: center;
+    }
+
+    h3 {
+        margin-top: 1%;
+        color: #ddac0f !important;
+    }
+
+    p {
+        color: #cecece;
+    }
+
+    button {
+        border-radius: 20px;
+        border: 1px solid #ddac0f;
+        background-color: #333;
+    }
+
+    .widget-content button {
+        color: #ddac0f;
+        margin-top: 1%;
+        margin-bottom: 1%;
+        margin-right: 7%;
+        transition: 0.5s linear;
+    }
+
+    .widget-content-header {
+        margin-top: 1%;
+        margin-left:1%;
+        margin-right:1%;
+        display: flex;
+        margin-bottom: 3%;
+        justify-content: space-between;
+    }
+
+    .widget-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .widget-content-header h3 {
+            margin-right: auto;
+        }
+
+        .widget-content-header a {
+            display: flex;
+            align-items: center;
+            margin-left:1%;
+        }
+
+    .widget-container button:hover {
+        background-color: #ddac0f;
+        color: #333;
+        width: 15%;
+    }
+
+    .widget-container button span {
+        color: #ddac0f;
+    }
+
+    .widget-container button:hover span {
+        color: #333;
+    }
+
+    .widget-buttons-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .textarea-share {
+        margin: 3%;
+        margin-bottom: 1%;
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid #ddac0f;
+        width: 95%;
+        height: 50px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        resize: none;
+    }
+
+        .textarea-share:focus {
+            width: 90%;
+            height: 100px;
+        }
+
+    .form-control {
+        background-color: #333; /* arka plan rengi */
+        color: #ddac0f; /* yazı rengi */
+        font-size: 15px; /* yazı tipi büyüklüğü */
+        font-family: Arial, sans-serif; /* yazı tipi */
+        border-radius: 20px; /* köşe yuvarlama */
+        border: 1px solid #ddac0f /* kenarlık */;
+        padding: 2px; /* iç boşluk */
+        width: 30%; /* genişlik */
+        transition: 0.5s linear;
+        height: 10%;
+        text-align: center;
+        margin-top: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+
+        .form-control:hover {
+            background-color: #ddac0f;
+            color: #333;
+        }
+
+        .form-control:focus {
+            background-color: #333;
+            color: #ddac0f;
+            border: 1px solid #ddac0f /* kenarlık */;
+        }
+
+</style>
+<div id="modalPlaceHolder" aria-hidden="true"></div>
+@{
+    foreach (var moot in Model.DtoList)
+    {
+        <div class="widget-container">
+            <div class="widget-content">
+            <div class="widget-content-header">
+                    <h3>@moot.UserName</h3>
+                    <div id="mootId" aria-hidden="true">@moot.Id</div>
+                    <a id="btn-edit" data-mootId="@moot.Id" href="#"><span class="fas fa-edit"></span></a>
+                    <a href="#"><span class="fas fa-trash"></span></a>
+            </div>
+                <p>@moot.Text</p>
+                <div class="widget-buttons-center">
+                    <button><span class="fas fa-award"></span> Katıl : @moot.AgreeCount</button>
+                    <button><span class="fas fa-comments"></span> Yorum : @moot.CommentCount</button>
+                    <button><span class="fas fa-reply-all"></span> Alıntı : @moot.ViewCount</button>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(function(){
+                const url='/Home/Share/';
+                const placeHolderDiv = $('#modalPlaceHolder');
+                $(document).on('click','btn-edit',function(event){
+                    event.preventDefault();
+                    var mootid= event.getAttribute('data-mootId');
+                    console.log(mootid);
+                    $.get(url,{id=mootid}).done(function(data){
+                        placeHolderDiv.html(data);
+                        placeHolderDiv.find('.modal').modal('show');
+                    });
+                });
+            });
+        });
+    </script>
 }

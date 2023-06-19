@@ -28,10 +28,10 @@ namespace mootableProject.Shared.Entities.Dtos
         [MaxLength(50, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
         [MinLength(3, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
         public string LastName { get; set; }
-        [DisplayName("Yaş")]
-        public int Age { get; set; }
-        [DisplayName("Cinsiyet")]
-        public int Gender { get; set; }
+        //[DisplayName("Yaş")]
+        //public int Age { get; set; }
+        //[DisplayName("Cinsiyet")]
+        //public int Gender { get; set; }
         [DisplayName("E-Posta Adresi")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
         [MaxLength(100, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
@@ -44,10 +44,5 @@ namespace mootableProject.Shared.Entities.Dtos
         [MinLength(13, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
-        [DisplayName("Resim Ekle")]
-        [DataType(DataType.Upload)]
-        public IFormFile PictureFile { get; set; }
-        [DisplayName("Resim")]
-        public string Picture { get; set; }
     }
 }
