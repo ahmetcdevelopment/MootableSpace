@@ -154,6 +154,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<div id="modalPlaceHolder" aria-hidden="true"></div>
 <div class="widget-container">
     <div class="widget-content">
         @Html.Partial("Share",Model.EditModel)
@@ -170,8 +171,8 @@
             </div>
                 <p>@moot.Text</p>
                 <div class="widget-buttons-center">
-                    <button><span class="fas fa-award"></span> Katıl : @moot.AgreeCount</button>
-                    <button><span class="fas fa-comments"></span> Yorum : @moot.CommentCount</button>
+                    <button id="btn-agree"><span class="fas fa-award"></span> Katıl : @moot.AgreeCount</button>
+                    <button id="btn-comment" onclick="commentEdit('@moot.Id')"><span class="fas fa-comments"></span> Yorum : @moot.CommentCount</button>
                     <button><span class="fas fa-reply-all"></span> Alıntı : @moot.ViewCount</button>
                 </div>
             </div>
@@ -180,4 +181,19 @@
 }
 
 <script>
+    function commentEdit(mootId){
+        //window.location.href = "/Home/CommentEdit?mootId=" + mootId;
+        var url = "/Home/CommentEdit?mootId=" + mootId;
+        window.open(url,"_blank");
+    }
+    //$(document).ready(function(){
+    //    $(function(){
+    //        const url = '/Home/CommentEdit/';
+    //        const placeHolderDiv=$('#modalPlaceHolder');
+    //        $(document).on('click','.btn-comment',function(event){
+    //            event.preventDefault();
+    //            var id = 
+    //        }
+    //    })
+    //});
 </script>

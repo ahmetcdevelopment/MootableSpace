@@ -1,0 +1,16 @@
+﻿@model MootableSpace.Web.Models.CommentEditViewModel
+@{
+}
+<head>
+    <link rel="stylesheet" href="/Content/css/popups.css" />
+    <link rel="stylesheet" href="/Content/css/moot.css" />
+</head>
+<body>
+    <div class="popup">
+        <div class="popup-content">
+            <form asp-controller="Home" asp-action="CommentEdit" id="form-edit-comment">
+                <textarea id="mootTextArea" asp-for="Text" class="textarea-share form-control" placeholder="Bir yorum paylaş."></textarea>
+            </form>
+        </div>
+    </div>
+</body>

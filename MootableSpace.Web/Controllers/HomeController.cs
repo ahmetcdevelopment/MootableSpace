@@ -18,12 +18,15 @@ namespace MootableSpace.Web.Controllers
         private readonly IMootService _mootService;
         private readonly UserManager<User> _userService;
         private readonly ICategoryService _categoryService;
-        public HomeController(ILogger<HomeController> logger, IMootService mootService, UserManager<User> userService, ICategoryService categoryService)
+        private readonly ICommentService _commentService;
+        public HomeController(ILogger<HomeController> logger, IMootService mootService,
+            UserManager<User> userService, ICategoryService categoryService,ICommentService commentService)
         {
             _logger = logger;
             _mootService = mootService;
             _userService = userService;
             _categoryService = categoryService;
+            _commentService = commentService;
         }
 
         public IActionResult Index()
@@ -84,6 +87,30 @@ namespace MootableSpace.Web.Controllers
             //}
             //var result = new Result(ResultStatus.Error, "Lütfen tüm alanları doldurunuz.");
             //return Json(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CommentEdit(int mootId,int? parentId,int? commentId)
+        {
+            var model = new CommentEditViewModel();
+            var result = await _mootService.SelectById(mootId);
+            if (commentId.HasValue)
+            {
+                var comment = await _commentService.SelectById(commentId.Value);
+                model.Text = comment.Data.Text;
+                model.Id = comment.Data.Id;
+            }
+            
+            var user = await _userService.GetUserAsync(HttpContext.User);
+            if (result.Data!=null)
+            {
+                var entity = result.Data;
+                model.UserId = user.Id;
+                model.MootId=mootId;
+                model.ParentId = parentId != 0 && parentId >= 0 ? parentId : 0;
+                model.ViewCount = 0;
+                model.AgreeCount = 0;
+            }
+            return PartialView(model);
         }
 
         public IActionResult Privacy()

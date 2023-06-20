@@ -21,6 +21,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMootService, MootManager>();
 builder.Services.AddScoped<ICategoryService,  CategoryManager>();
+builder.Services.AddScoped<ICommentService,  CommentManager>();
 #endregion
 builder.Services.AddIdentity<User, Role>(options =>
 {
